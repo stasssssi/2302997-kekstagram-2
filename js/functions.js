@@ -1,23 +1,36 @@
-function getLengthString (string, maxLength) {
+const getLengthString = (string, maxLength) => {
   if (string.length <= maxLength) {
     return true;
   }
   return false;
-}
+};
+
 getLengthString('проверка', 20);
 
 
-function isPalindrom (string) {
+const isPalindrom = (string) => {
   const normalize = string.toLowerCase();
-  let newString = '';
+  const reversed = normalize.split('').reverse().join('');
+  return normalize === reversed;
+};
 
-  for (let i = normalize.length - 1; i >= 0; i --) {
-    newString += normalize[i];
-  }
-  if (normalize === newString) {
-    return true;
-  }
-  return false;
-}
-isPalindrom('тот');
+isPalindrom('топот');
+isPalindrom('ДовОд');
+isPalindrom('Кекс');
 
+
+const extractNumberFromString = (string) => {
+  const normalize = string.toString();
+  let result = '';
+
+  for (let i = 0; i < normalize.length; i++) {
+    const num = parseInt(normalize[i], 10);
+    if (!Number.isNaN(num)) {
+      result += normalize[i];
+    }
+  }
+
+  return result.length === 0 ? NaN : parseInt(result, 10);
+};
+
+extractNumberFromString('ECMAScript 2022');
