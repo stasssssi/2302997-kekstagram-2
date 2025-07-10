@@ -1,77 +1,75 @@
-const IDS = [];
-const URL_PICTURES = [];
-
-for (let i = 1; i <= 25; i++) {
-  IDS.push(i);
-  URL_PICTURES.push(`photos/${i}.jpg`);
-}
-
 const DESCRIPTIONS = [
-  'Закат',
-  'Весёлый котик на подоконнике',
-  'Горная тропа в тумане',
-  'Чашка кофе на рассвете',
-  'Цветущее поле лаванды',
-  'Прогулка по осеннему парку',
-  'Лучи солнца сквозь листву',
-  'Уютный вечер',
-  'Песчаный пляж и волны',
-  'Ночное небо',
-  'Уличный музыкант в старом городе',
-  'Смешной щенок в коробке',
-  'Горы, отражённые в озере',
-  'Кусочек вкусного торта',
-  'Туманное утро на озере',
-  'Девушка c воздушными шарами',
-  'Полет воздушного змея',
-  'Пикник в цветущем саду',
-  'Летний дождь и зонт',
-  'Старый велосипед',
-  'Пальмы на фоне заката',
-  'Путь через лес',
-  'Коты спят обнявшись',
-  'Огни ночного города',
-  'Маленький домик в деревне'
+  'Закат на берегу океана',
+  'Котик отдыхает на подоконнике',
+  'Уличный музыкант в Париже',
+  'Горы на рассвете',
+  'Шумный вечер в центре города',
+  'Уютное кафе в Тбилиси',
+  'Дождливый день',
+  'Смешной момент с друзьями',
+  'Прогулка по лесу',
+  'Чашка кофе и хорошая книга',
+  'Радуга после грозы',
+  'Красивая архитектура старого города',
+  'Ужин на крыше',
+  'Пляж и коктейль',
+  'Утренняя йога на траве',
+  'Котёнок играет с клубком',
+  'Полет над облаками',
+  'Снежный вечер у камина',
+  'Рассвет в пустыне',
+  'Поездка в горы',
+  'Звёздное небо',
+  'Цветочный рынок',
+  'Круиз по Средиземному морю',
+  'Уличная еда в Азии',
+  'На вершине мира'
 ];
 
-const getRandomNumber = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
-
-const COMMENT_MESSAGES = [
+const MESSAGES = [
   'Всё отлично!',
   'В целом всё неплохо. Но не всё.',
-  'Когда вы делаете фотографию, хорошо бы убирать палец из кадра.',
-  'Моя бабушка сделала фото лучше.',
-  'Я уронил фотоаппарат на кота, и вышло лучше.',
-  'Лица перекошены. Неудачный момент.'
+  'Когда вы делаете фотографию, хорошо бы убирать палец из кадра. В конце концов это просто непрофессионально.',
+  'Моя бабушка случайно чихнула с фотоаппаратом в руках и у неё получилась фотография лучше.',
+  'Я поскользнулся на банановой кожуре и уронил фотоаппарат на кота и у меня получилась фотография лучше.',
+  'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!'
 ];
 
-const COMMENT_NAMES = ['Артём', 'Оля', 'Иван', 'Аня', 'Дима', 'Лена', 'Настя', 'Максим', 'Катя'];
+const NAMES = ['Артём', 'Оля', 'Катя', 'Иван', 'Настя', 'Михаил', 'Дима', 'Алиса', 'Сергей', 'Лена'];
 
-let commentID = 1;
+const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+const getRandomArrayItem = arr => arr[getRandomInt(0, arr.length - 1)];
 
-const createComment = () => ({
-  id: commentID++,
-  avatar: `img/avatar-${getRandomNumber(1, 6)}.svg`,
-  message: COMMENT_MESSAGES[getRandomNumber(0, COMMENT_MESSAGES.length - 1)],
-  name: COMMENT_NAMES[getRandomNumber(0, COMMENT_NAMES.length - 1)]
-});
-
-const generateComments = () => {
-  const count = getRandomNumber(0, 30);
-  return Array.from({ length: count }, createComment);
+const getRandomMessage = () => {
+  const count = getRandomInt(1, 2);
+  const selected = new Set();
+  while (selected.size < count) {
+    selected.add(getRandomArrayItem(MESSAGES));
+  }
+  return Array.from(selected).join(' ');
 };
 
-const photos = [];
+let commentId = 1;
 
-for (let i = 0; i < 25; i ++) {
-  const photo = {
-    id: IDS[i],
-    url: URL_PICTURES[i],
+const generateComment = () => ({
+  id: commentId++,
+  avatar: `img/avatar-${getRandomInt(1, 6)}.svg`,
+  message: getRandomMessage(),
+  name: getRandomArrayItem(NAMES)
+});
+
+const generateComments = () =>
+  Array.from({ length: getRandomInt(0, 30) }, () => generateComment());
+
+const generatePhotos = () =>
+  Array.from({ length: 25 }, (_, i) => ({
+    id: i + 1,
+    url: `photos/${i + 1}.jpg`,
     description: DESCRIPTIONS[i],
-    likes: getRandomNumber(15, 200),
+    likes: getRandomInt(15, 200),
     comments: generateComments()
-  };
-  photos.push(photo);
-}
+  }));
 
-console.log(photos);
+// Генерация данных
+const photoDescriptions = generatePhotos();
+console.log(photoDescriptions);
