@@ -34,3 +34,20 @@ const extractNumberFromString = (string) => {
 };
 
 extractNumberFromString('ECMAScript 2022');
+
+
+const isMeetingWithinWorkHours = (workStart, workEnd, meetingStart, duration) => {
+  const parseTime = (time) => {
+    const [hours, minutes] = time.split(':').map(Number);
+    return hours * 60 + minutes;
+  };
+
+  const workStartMin = parseTime(workStart);
+  const workEndMin = parseTime(workEnd);
+  const meetingStartMin = parseTime(meetingStart);
+  const meetingEndMin = meetingStartMin + duration;
+
+  return meetingStartMin >= workStartMin && meetingEndMin <= workEndMin;
+};
+
+isMeetingWithinWorkHours('08:00', '17:30', '14:00', 90);
